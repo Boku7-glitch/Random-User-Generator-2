@@ -40,7 +40,7 @@ h1 {
     width: 150px;
     height: 150px;
     margin: 5px;
-    border: 5px solid tomato;
+    border: 5px solid darkturquoise;
     transition: 0.3s;
     cursor: pointer;
     box-shadow: 0 5px 5px rgba(11, 87, 87, 0.5);
