@@ -1,45 +1,47 @@
-const img =
-    document.querySelector('#img');
-const name =
-    document.querySelector('#name');
-const age =
-    document.querySelector('#age');
-const dob =
-    document.querySelector('#dob');
-const gender =
-    document.querySelector('#gender');
-const email =
-    document.querySelector('#email');
-const phone =
-    document.querySelector('#phone');
-const address =
-    document.querySelector('#address');
-const generateBtn =
-    document.querySelector('#generate');
+const img = document.querySelector('#img');
+const nameElement = document.querySelector('#name');
+const ageElement = document.querySelector('#age');
+const dobElement = document.querySelector('#dob');
+const genderElement = document.querySelector('#gender');
+const emailElement = document.querySelector('#email');
+const phoneElement = document.querySelector('#phone');
+const addressElement = document.querySelector('#address');
+const generateBtn = document.querySelector('#generate');
+const info = document.querySelector('.info');
 
+generateBtn.addEventListener('click', () => {
+    getUserData();
+});
 
-generateBtn.addEventListener('click', (e) => {
-    getUserInfo()
-})
+async function getUserData() {
+    const url = `https://randomuser.me/api/`;
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+        const json = await response.json();
+        const user = json.results[0];
 
-async function getUserInfo() {
-    const response =
-        await fetch('https://randomuser.me/api/');
-    const result = await response.json();
-    console.log(result);
-    setUserInfo(result);
-}
+        const fullName = `${user.name.first} ${user.name.last}`;
+        const gender = user.gender;
+        const country = user.location.country;
+        const city = user.location.city;
+        const email = user.email;
+        const dob = new Date(user.dob.date).toLocaleDateString();
+        const age = user.dob.age;
+        const icon = user.picture.medium;
 
-function setUserInfo(result) {
-    img.src = results.picture.large;
-    name.textContent =
-        results.name + " " + results.name.last;
-    age.textContent = results.dob.age;
-    dob.textContent = results.dob.date.split("T")[0];
-    gender.textContent = results.gender;
-    email.textContent = results.email;
-    phone.textContent = results.phone;
-    address.textContent =
-        results.location.country + " " +
-        results.location.city;
+        info.innerHTML = `
+            <img src="${icon}" alt="User Image">
+            <h3>Country: ${country}, ${city}</h3>
+            <h2>Name: ${fullName}</h2>
+            <p>Gender: ${gender}</p>
+            <p>Age: ${age}</p>
+            <p>Date Of Birth: ${dob}</p>
+            <p>Email: ${email}</p>
+        `;
+    } catch (error) {
+        console.error("Error fetching user data:", error.message);
+    }
 }
